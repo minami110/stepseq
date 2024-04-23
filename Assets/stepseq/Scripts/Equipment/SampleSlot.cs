@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace stepseq
@@ -7,7 +6,7 @@ namespace stepseq
     [RequireComponent(typeof(BoxCollider))]
     public class SampleSlot : MonoBehaviour
     {
-        private bool IsEmpty { get;  set; }
+        private bool IsEmpty { get; set; }
         
         private void Awake()
         {

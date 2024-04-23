@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace stepseq
 {
@@ -14,7 +15,10 @@ namespace stepseq
         private Renderer m_buttonRenderer = null!;
         
         [SerializeField]
-        private TextMesh m_textMesh = null!;
+        private UnityEvent m_onClick = null!;
+        
+        [SerializeField]
+        private TextMesh? m_textMesh;
         
         [SerializeField]
         [TextArea]
@@ -29,7 +33,6 @@ namespace stepseq
             SetButtonColor(Color.gray);
         }
         
-        
         private void OnDestroy()
         {
             DestroyImmediate(_material);
@@ -38,13 +41,19 @@ namespace stepseq
         private void OnTriggerEnter(Collider other)
         {
             SetButtonColor(new Color(0.48f, 0.39f, 0.09f));
-            HintBox.SetText(m_hintText);
+            if (m_hintText.Length > 0)
+            {
+                HintBox.SetText(m_hintText);
+            }
         }
         
         private void OnTriggerExit(Collider other)
         {
             SetButtonColor(Color.gray);
-            HintBox.ClearText();
+            if (m_hintText.Length > 0)
+            {
+                HintBox.ClearText();
+            }
         }
         
         void IClickable.LeftClick(bool isPressed)
@@ -53,11 +62,12 @@ namespace stepseq
             {
                 SetButtonColor(new Color(1f, 0.82f, 0.15f));
             }
-            // ToDo: なにか処理を..
+            
+            m_onClick.Invoke();
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void SetButtonColor(in Color color)
+        public void SetButtonColor(in Color color)
         {
             _material.color = color;
         }
@@ -65,6 +75,11 @@ namespace stepseq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetText(string text)
         {
+            if (m_textMesh == null)
+            {
+                return;
+            }
+            
             m_textMesh.text = text;
         }
     }
