@@ -1,7 +1,9 @@
 {
   "name": "stepseq",
   "rootNamespace": "stepseq",
-  "references": [],
+  "references": [
+    "GUID:7fd24eef75439a346863f9a92a4db8b6"
+  ],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
