@@ -18,6 +18,7 @@ namespace stepseq
         private int  _id;
         
         private Material _material = null!;
+        private Track    _track    = null!;
         
         private void Awake()
         {
@@ -53,9 +54,10 @@ namespace stepseq
             _material.color = color;
         }
         
-        public void Init(int id)
+        public void Init(int id, Track track)
         {
             _id = id;
+            _track = track;
             TimeManager.ActiveTrack
                 .Subscribe(this, (i, state) => { state.OnChangedActiveTrack(i); })
                 .RegisterTo(destroyCancellationToken);
@@ -69,6 +71,7 @@ namespace stepseq
                 {
                     // トラックがアクティブになったので効果を適用する
                     SetButtonColor(Color.white);
+                    _track.Execute();
                 }
                 else
                 {

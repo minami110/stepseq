@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace stepseq
@@ -6,11 +7,20 @@ namespace stepseq
     [RequireComponent(typeof(BoxCollider))]
     public class SampleSlot : MonoBehaviour
     {
-        private bool IsEmpty { get; set; }
+        private Sample? _sample;
         
-        private void Awake()
+        private bool IsEmpty
         {
-            IsEmpty = true;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _sample == null;
+        }
+        
+        internal void ReleaseMe(Sample sample)
+        {
+            if (_sample == sample)
+            {
+                _sample = null;
+            }
         }
         
         public bool AssignSample(Sample sample)
@@ -20,8 +30,19 @@ namespace stepseq
                 return false;
             }
             
-            sample.transform.position = transform.position;
-            IsEmpty = false;
+            _sample = sample;
+            _sample.OnAssignedSlot(this);
+            return true;
+        }
+        
+        public bool Execute()
+        {
+            if (IsEmpty)
+            {
+                return false;
+            }
+            
+            _sample!.Execute();
             return true;
         }
     }

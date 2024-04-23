@@ -19,7 +19,13 @@ namespace stepseq
             transform.Rotate(Vector3.forward, 1f * Time.deltaTime);
         }
         
-        public void TakeDamage(float damage)
+        public static void TakeDamage(float damage)
+        {
+            // ToDo:
+            Debug.Log($"Enemy took {damage} damage!");
+        }
+        
+        void IEntity.TakeDamage(float damage)
         {
             throw new NotImplementedException();
         }

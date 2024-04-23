@@ -26,9 +26,9 @@ namespace stepseq
         [TextArea]
         private string m_hintText = string.Empty;
         
-        private Vector3? _dragStartPosition;
-        
-        private Material _material = null!;
+        private SampleSlot? _assignedSlot;
+        private Vector3?    _dragStartPosition;
+        private Material    _material = null!;
         
         private void Awake()
         {
@@ -130,6 +130,23 @@ namespace stepseq
             
             ArrayPool<Collider>.Shared.Return(results);
             return success;
+        }
+        
+        internal void OnAssignedSlot(SampleSlot slot)
+        {
+            if (_assignedSlot != null)
+            {
+                _assignedSlot.ReleaseMe(this);
+            }
+            
+            _assignedSlot = slot;
+            transform.position = _assignedSlot.transform.position;
+        }
+        
+        public virtual void Execute()
+        {
+            // ToDo: サンプルの効果を発動する
+            DummyEnemy.TakeDamage(10);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

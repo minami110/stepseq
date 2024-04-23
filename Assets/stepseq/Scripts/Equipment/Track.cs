@@ -14,8 +14,13 @@ namespace stepseq
             var id = 0;
             foreach (var button in buttons)
             {
-                button.Init(id++);
+                button.Init(id++, this);
             }
+        }
+        
+        internal void Execute()
+        {
+            m_sampleSlot.Execute();
         }
     }
 }
