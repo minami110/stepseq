@@ -33,16 +33,18 @@ namespace stepseq
             {
                 // SphereCast する
                 var results = ArrayPool<Collider>.Shared.Rent(16);
-                var count = Physics.OverlapSphereNonAlloc(newPosition, 0.1f, results, 1 << LayerMask.NameToLayer("Default"),
+                var count = Physics.OverlapSphereNonAlloc(newPosition, 0.1f, results,
+                    1 << LayerMask.NameToLayer("Default"),
                     QueryTriggerInteraction.Collide);
                 var resultsAsSpan = results.AsSpan(0, count);
-                foreach(var col in resultsAsSpan)
+                foreach (var col in resultsAsSpan)
                 {
                     if (col.TryGetComponent(out IClickable clickable))
                     {
                         clickable.LeftClick(true);
                     }
                 }
+                
                 ArrayPool<Collider>.Shared.Return(results);
             }
             
@@ -51,16 +53,18 @@ namespace stepseq
             {
                 // SphereCast する
                 var results = ArrayPool<Collider>.Shared.Rent(16);
-                var count = Physics.OverlapSphereNonAlloc(newPosition, 0.1f, results, 1 << LayerMask.NameToLayer("Default"),
+                var count = Physics.OverlapSphereNonAlloc(newPosition, 0.1f, results,
+                    1 << LayerMask.NameToLayer("Default"),
                     QueryTriggerInteraction.Collide);
                 var resultsAsSpan = results.AsSpan(0, count);
-                foreach(var col in resultsAsSpan)
+                foreach (var col in resultsAsSpan)
                 {
                     if (col.TryGetComponent(out IClickable clickable))
                     {
                         clickable.LeftClick(false);
                     }
                 }
+                
                 ArrayPool<Collider>.Shared.Return(results);
             }
         }

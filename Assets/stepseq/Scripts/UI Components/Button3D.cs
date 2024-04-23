@@ -16,6 +16,10 @@ namespace stepseq
         [SerializeField]
         private TextMesh m_textMesh = null!;
         
+        [SerializeField]
+        [TextArea]
+        private string m_hintText = string.Empty;
+        
         private Material _material = null!;
         
         private void Awake()
@@ -34,11 +38,13 @@ namespace stepseq
         private void OnTriggerEnter(Collider other)
         {
             SetButtonColor(new Color(0.48f, 0.39f, 0.09f));
+            HintBox.SetText(m_hintText);
         }
         
         private void OnTriggerExit(Collider other)
         {
             SetButtonColor(Color.gray);
+            HintBox.ClearText();
         }
         
         void IClickable.LeftClick(bool isPressed)
@@ -47,10 +53,7 @@ namespace stepseq
             {
                 SetButtonColor(new Color(1f, 0.82f, 0.15f));
             }
-            else
-            {
-                Debug.Log("Button3D: LeftClick");
-            }
+            // ToDo: なにか処理を..
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

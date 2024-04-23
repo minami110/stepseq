@@ -84,6 +84,11 @@ namespace stepseq
             _moneyRp.RegisterTo(destroyCancellationToken);
         }
         
+        private void OnDestroy()
+        {
+            _instance = null;
+        }
+        
         public static void AddMoney(int amount)
         {
             // ToDo: 現時点では負の値も許容する

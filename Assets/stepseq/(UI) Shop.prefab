@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 146035661654135190}
   m_Layer: 0
-  m_Name: Shop
+  m_Name: (UI) Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -426,6 +426,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596321366388482247, guid: a2e5be8cea53ea54f9a57b793da333c0,
+        type: 3}
+      propertyPath: m_hintText
+      value: "\u30B7\u30E7\u30C3\u30D7\u306E\u30A2\u30A4\u30C6\u30E0\u3092\u30EA\u30ED\u30FC\u30EB
+        (\u672A\u5B9F\u88C5)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

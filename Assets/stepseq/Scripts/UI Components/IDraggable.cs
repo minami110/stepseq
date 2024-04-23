@@ -2,7 +2,7 @@
 
 namespace stepseq
 {
-    public interface IDraggable: IClickable
+    public interface IDraggable : IClickable
     {
     }
 }
