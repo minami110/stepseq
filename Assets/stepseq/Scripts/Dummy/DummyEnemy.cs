@@ -12,8 +12,7 @@ namespace stepseq
         [SerializeField]
         private DummyLog m_logger = null!;
         
-        [SerializeField]
-        private Shader m_shader;
+        private readonly EntityState _entityState = new();
         
         private void Awake()
         {
@@ -26,11 +25,6 @@ namespace stepseq
             m_logger.Log("");
         }
         
-        private void OnDestroy()
-        {
-            _instance = null;
-        }
-        
         // Update is called once per frame
         private void Update()
         {
@@ -40,19 +34,25 @@ namespace stepseq
             transform.Rotate(Vector3.forward, 1f * Time.deltaTime);
         }
         
-        public static void TakeDamage(float damage)
+        private void OnDestroy()
         {
-            // ToDo:
-            GetInstance().m_logger.Log($"{damage}");
+            _entityState.Dispose();
+            _instance = null;
         }
         
-        void IEntity.TakeDamage(float damage)
+        void IEntity.AddStack(StackType type, float amount)
         {
-            throw new NotImplementedException();
+            _entityState.AddStack(type, amount);
         }
         
+        void IEntity.SolveHealth(int seed)
+        {
+            _entityState.SolveHealth(seed);
+        }
+        
+        // Note: internal にしているのは Debug 用途
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static DummyEnemy GetInstance()
+        internal static DummyEnemy GetInstance()
         {
             if (_instance != null)
             {

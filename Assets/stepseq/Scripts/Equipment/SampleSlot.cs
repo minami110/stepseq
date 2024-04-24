@@ -7,7 +7,7 @@ namespace stepseq
     [RequireComponent(typeof(BoxCollider))]
     public class SampleSlot : MonoBehaviour
     {
-        private Sample? _sample;
+        private SampleBase? _sample;
         
         private bool IsEmpty
         {
@@ -15,7 +15,7 @@ namespace stepseq
             get => _sample == null;
         }
         
-        internal void ReleaseMe(Sample sample)
+        internal void ReleaseMe(SampleBase sample)
         {
             if (_sample == sample)
             {
@@ -23,7 +23,7 @@ namespace stepseq
             }
         }
         
-        public bool AssignSample(Sample sample)
+        public bool AssignSample(SampleBase sample)
         {
             if (!IsEmpty)
             {
@@ -31,7 +31,7 @@ namespace stepseq
             }
             
             _sample = sample;
-            _sample.OnAssignedSlot(this);
+            _sample.OnAssignedSampleSlot(this);
             return true;
         }
         

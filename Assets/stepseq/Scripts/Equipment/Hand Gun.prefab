@@ -226,6 +226,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5095975344163019587}
+  - component: {fileID: 4825640293923370557}
   - component: {fileID: 6604435214561307763}
   - component: {fileID: 8468998833370728942}
   m_Layer: 0
@@ -252,6 +253,20 @@ Transform:
   - {fileID: 8683943444660831340}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4825640293923370557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400292462290478809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10c6cbd6859847bf9e24eb1ddca4a2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_price: 5
+  m_hintText: 10 damage
 --- !u!114 &6604435214561307763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,12 +279,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b9982c9d920ce842a3868ed156473d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_sampleBase: {fileID: 4825640293923370557}
   m_buttonShader: {fileID: 4800000, guid: 7b73d20dea8e9e5439ec3b3ea3b7b7e4, type: 3}
   m_buttonRenderer: {fileID: 385234512766395061}
   m_priceText: {fileID: 3379774467153240109}
-  m_price: 5
-  m_hintText: "\u653B\u6483\u529B: 10\n\u5BFE\u8C61\u304C\u6BD2\u306E\u5834\u5408
-    20"
 --- !u!65 &8468998833370728942
 BoxCollider:
   m_ObjectHideFlags: 0
