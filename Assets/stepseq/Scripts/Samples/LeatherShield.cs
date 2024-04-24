@@ -2,7 +2,7 @@
 
 namespace stepseq
 {
-    public sealed class HandGun : SampleBase
+    public sealed class LeatherShield : SampleBase
     {
         protected override int GetPrice()
         {
@@ -11,13 +11,13 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return "10 ダメージを与える";
+            return "10 シールドを得る";
         }
         
         public override void Execute(IEntity from, IEntity to)
         {
-            // 相手にダメージ 10 を与える
-            EffectManager.AddEffect<TakeHealthDamage>(to, 10f);
+            // 実行者にシールド 10 を与える
+            EffectManager.AddEffect<TakeShield>(from, 10f);
         }
     }
 }

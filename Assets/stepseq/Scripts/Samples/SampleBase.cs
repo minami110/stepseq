@@ -8,14 +8,6 @@ namespace stepseq
     [DisallowMultipleComponent]
     public abstract class SampleBase : MonoBehaviour
     {
-        [SerializeField]
-        [Range(0, 100)]
-        private int m_price = 5;
-        
-        [SerializeField]
-        [TextArea]
-        private string m_hintText = string.Empty;
-        
         private SampleSlot? _assignedSlot;
         
         /// <summary>
@@ -24,22 +16,18 @@ namespace stepseq
         public int Price
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => m_price;
+            get => GetPrice();
         }
         
         public string HintText
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => m_hintText;
+            get => GetHintText();
         }
         
         internal bool TryBuy()
         {
-            var currentMoney = PlayerState.Money.CurrentValue;
-            if (currentMoney < m_price)
-            {
-                return false;
-            }
+            // ToDo: 所持金のチェック (現在は未実装)
             
             var success = false;
             var results = ArrayPool<Collider>.Shared.Rent(16);
@@ -53,7 +41,7 @@ namespace stepseq
                 {
                     if (slot.AssignSample(this))
                     {
-                        PlayerState.AddMoney(-m_price);
+                        // ToDo: 所持金の現象 (現在は未実装)
                         success = true;
                         break;
                     }
@@ -75,6 +63,10 @@ namespace stepseq
             transform.position = _assignedSlot.transform.position;
         }
         
-        public abstract void Execute();
+        protected abstract int GetPrice();
+        
+        protected abstract string GetHintText();
+        
+        public abstract void Execute(IEntity from, IEntity to);
     }
 }

@@ -114,7 +114,7 @@ namespace stepseq
         {
             while (!token.IsCancellationRequested)
             {
-                transform.position = PlayerState.Position;
+                transform.position = MousePlayerState.Position;
                 await Awaitable.NextFrameAsync(token);
             }
         }

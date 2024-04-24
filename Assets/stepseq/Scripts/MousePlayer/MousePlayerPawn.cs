@@ -8,7 +8,7 @@ namespace stepseq
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Rigidbody))]
-    public sealed class PlayerPawn : MonoBehaviour
+    public sealed class MousePlayerPawn : MonoBehaviour
     {
         [SerializeField]
         private Camera m_mainCamera = null!;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace stepseq
 {
     [DisallowMultipleComponent]
-    public class DummyLog : MonoBehaviour
+    public class RuntimeLogger : MonoBehaviour
     {
         private const int _LOG_COUNT = 10;
         

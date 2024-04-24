@@ -9,6 +9,9 @@ namespace stepseq
     {
         private SampleBase? _sample;
         
+        // ToDO: 適当
+        internal int PlayerIndex = -1;
+        
         private bool IsEmpty
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +45,17 @@ namespace stepseq
                 return false;
             }
             
-            _sample!.Execute();
+            switch (PlayerIndex)
+            {
+                case 0:
+                    _sample!.Execute(PlayerMockManager.GetPlayerMock(0), PlayerMockManager.GetPlayerMock(1));
+                    break;
+                case 1:
+                    _sample!.Execute(PlayerMockManager.GetPlayerMock(1), PlayerMockManager.GetPlayerMock(0));
+                    break;
+                default:
+                    throw new System.Exception("Invalid PlayerIndex");
+            }
             return true;
         }
     }
