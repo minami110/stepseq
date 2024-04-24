@@ -67,6 +67,6 @@ namespace stepseq
         
         protected abstract string GetHintText();
         
-        public abstract void Execute(IEntity from, IEntity to);
+        public abstract void Execute(EntityState from, EntityState to);
     }
 }

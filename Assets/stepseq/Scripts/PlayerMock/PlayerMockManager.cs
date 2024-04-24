@@ -94,15 +94,15 @@ namespace stepseq
             {
                 m_playerSlotRoot0.SetActive(true);
                 m_playerSlotRoot1.SetActive(false);
-                m_player0.SetBaseColor(new Color(0.27f, 0.24f, 0.13f));
-                m_player1.SetBaseColor(new Color(0.33f, 0.33f, 0.33f, 0.84f));
+                m_player0.SetBaseColor(new Color(0.44f, 0.39f, 0.08f));
+                m_player1.SetBaseColor(new Color(0.18f, 0.18f, 0.18f, 0.84f));
             }
             else
             {
                 m_playerSlotRoot0.SetActive(false);
                 m_playerSlotRoot1.SetActive(true);
-                m_player0.SetBaseColor(new Color(0.33f, 0.33f, 0.33f, 0.84f));
-                m_player1.SetBaseColor(new Color(0.27f, 0.24f, 0.13f));
+                m_player1.SetBaseColor(new Color(0.44f, 0.39f, 0.08f));
+                m_player0.SetBaseColor(new Color(0.18f, 0.18f, 0.18f, 0.84f));
             }
         }
         

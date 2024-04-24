@@ -14,7 +14,7 @@ namespace stepseq
             return "10 シールドを得る";
         }
         
-        public override void Execute(IEntity from, IEntity to)
+        public override void Execute(EntityState from, EntityState to)
         {
             // 実行者にシールド 10 を与える
             EffectManager.AddEffect<TakeShield>(from, 10f);

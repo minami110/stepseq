@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.CompilerServices;
 using Edanoue.Rx;
 using UnityEngine;

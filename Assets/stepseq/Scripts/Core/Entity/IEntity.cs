@@ -5,6 +5,5 @@ namespace stepseq
     public interface IEntity
     {
         public void AddStack(StackType type, float amount);
-        public void SolveHealth(int seed);
     }
 }

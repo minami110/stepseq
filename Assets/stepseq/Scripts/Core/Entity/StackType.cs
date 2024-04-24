@@ -6,6 +6,7 @@ namespace stepseq
     {
         // Buff
         Health,
+        MaxHealth,
         Shield,
         Luck,
         LifeSteal,

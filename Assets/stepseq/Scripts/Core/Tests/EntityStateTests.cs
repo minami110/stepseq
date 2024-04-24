@@ -9,7 +9,7 @@ public class EntityStateTests
         using var player0 = new EntityState();
         
         // 体力を初期化
-        player0.AddStack(StackType.Health, 100f);
+        player0.Clear(100f);
         
         // ダメージを与える
         player0.AddStack(StackType.HealthDamage, 10f);
@@ -23,7 +23,7 @@ public class EntityStateTests
         using var player0 = new EntityState();
         
         // 体力を初期化
-        player0.AddStack(StackType.Health, 100f);
+        player0.Clear(100f);
         
         // シールドを追加してダメージを与える
         player0.AddStack(StackType.Shield, 20f);

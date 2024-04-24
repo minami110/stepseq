@@ -11,6 +11,9 @@ namespace stepseq
         private TextMesh m_textHealth = null!;
         
         [SerializeField]
+        private TextMesh m_textMaxHealth = null!;
+        
+        [SerializeField]
         private TextMesh m_textShield = null!;
         
         private EntityState _entityState = null!;
@@ -22,6 +25,11 @@ namespace stepseq
             // Bind Health
             _entityState.Health
                 .Subscribe(this, (x, state) => { state.m_textHealth.text = $"Health: {x}"; })
+                .RegisterTo(destroyCancellationToken);
+            
+            // Bind MaxHealth
+            _entityState.MaxHealth
+                .Subscribe(this, (x, state) => { state.m_textMaxHealth.text = $"{x}"; })
                 .RegisterTo(destroyCancellationToken);
             
             // Bind Shield

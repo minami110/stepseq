@@ -27,7 +27,7 @@ namespace stepseq
             return $"10 ダメージを与える. 残り: {_count} 発";
         }
         
-        public override void Execute(IEntity from, IEntity to)
+        public override void Execute(EntityState from, EntityState to)
         {
             if (_count <= 0)
             {

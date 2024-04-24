@@ -15,6 +15,7 @@ namespace stepseq
         
         // Base stack
         private readonly ReactiveProperty<float> _healthRp       = new();
+        private readonly ReactiveProperty<float> _maxHealthRp    = new();
         private readonly ReactiveProperty<float> _lifeSteal      = new();
         private readonly ReactiveProperty<float> _luckRp         = new();
         private readonly ReactiveProperty<float> _poisonRp       = new();
@@ -27,6 +28,12 @@ namespace stepseq
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => _healthRp;
+        }
+        
+        public ReadOnlyReactiveProperty<float> MaxHealth
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _maxHealthRp;
         }
         
         public ReadOnlyReactiveProperty<float> Shield
@@ -57,6 +64,7 @@ namespace stepseq
         {
             // Base
             _healthRp.Dispose();
+            _maxHealthRp.Dispose();
             // Buff
             _shieldRp.Dispose();
             _luckRp.Dispose();
@@ -75,8 +83,13 @@ namespace stepseq
                 case StackType.Health:
                 {
                     var newHealth = _healthRp.Value + amount;
-                    newHealth = Math.Max(0, newHealth);
-                    _healthRp.Value = newHealth;
+                    _healthRp.Value = Math.Clamp(newHealth, 0, _maxHealthRp.Value);
+                    break;
+                }
+                case StackType.MaxHealth:
+                {
+                    var newMaxHealth = _maxHealthRp.Value + amount;
+                    _maxHealthRp.Value = Math.Max(0, newMaxHealth);
                     break;
                 }
                 case StackType.Shield:
@@ -156,10 +169,11 @@ namespace stepseq
             }
         }
         
-        public void Clear()
+        public void Clear(float health)
         {
             // Base
-            _healthRp.Value = 0;
+            _healthRp.Value = health;
+            _maxHealthRp.Value = health;
             // Buff
             _shieldRp.Value = 0;
             _luckRp.Value = 0;
