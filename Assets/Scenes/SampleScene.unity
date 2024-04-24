@@ -557,8 +557,18 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 945864360}
+    m_TransformParent: {fileID: 1138156623}
     m_Modifications:
+    - target: {fileID: 4932402513056275578, guid: 7fafb8b0800207b40bb5ed056edb1f59,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932402513056275578, guid: 7fafb8b0800207b40bb5ed056edb1f59,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -567,7 +577,7 @@ PrefabInstance:
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.39
       objectReference: {fileID: 0}
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
@@ -612,7 +622,7 @@ PrefabInstance:
     - target: {fileID: 9070465690114337642, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_Name
-      value: PlayerMock
+      value: PlayerMock 01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -762,7 +772,7 @@ PrefabInstance:
     - target: {fileID: 146035661654135190, guid: 0380363356aa0e2449dafead76ac5d71,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.62
+      value: 6.66
       objectReference: {fileID: 0}
     - target: {fileID: 146035661654135190, guid: 0380363356aa0e2449dafead76ac5d71,
         type: 3}
@@ -843,7 +853,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 796636158}
   - {fileID: 408796997}
   - {fileID: 1134630058}
   - {fileID: 921905837}
@@ -864,7 +873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1081002546
 Transform:
   m_ObjectHideFlags: 0
@@ -878,7 +887,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2631727646578015113}
   - {fileID: 1443185221}
   - {fileID: 1953937678}
   - {fileID: 1321884900}
@@ -945,6 +953,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2631727646578015113}
+  - {fileID: 796636158}
   - {fileID: 1081002546}
   - {fileID: 945864360}
   m_Father: {fileID: 0}
@@ -965,7 +975,7 @@ PrefabInstance:
     - target: {fileID: 146035661654135190, guid: 781d4f8ce7bb14447bf5f72a7df63eb1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.99
+      value: 6.65
       objectReference: {fileID: 0}
     - target: {fileID: 146035661654135190, guid: 781d4f8ce7bb14447bf5f72a7df63eb1,
         type: 3}
@@ -1560,17 +1570,17 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1081002546}
+    m_TransformParent: {fileID: 1138156623}
     m_Modifications:
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.22
+      value: -4.65
       objectReference: {fileID: 0}
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.39
       objectReference: {fileID: 0}
     - target: {fileID: 6061715260775903193, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
@@ -1615,7 +1625,7 @@ PrefabInstance:
     - target: {fileID: 9070465690114337642, guid: 7fafb8b0800207b40bb5ed056edb1f59,
         type: 3}
       propertyPath: m_Name
-      value: PlayerMock
+      value: PlayerMock 00
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

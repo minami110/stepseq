@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -48,14 +49,21 @@ namespace stepseq
             switch (PlayerIndex)
             {
                 case 0:
-                    _sample!.Execute(PlayerMockManager.GetPlayerMock(0), PlayerMockManager.GetPlayerMock(1));
+                    _sample!.Execute(
+                        PlayerMockManager.GetPlayerMock(0).State,
+                        PlayerMockManager.GetPlayerMock(1).State
+                    );
                     break;
                 case 1:
-                    _sample!.Execute(PlayerMockManager.GetPlayerMock(1), PlayerMockManager.GetPlayerMock(0));
+                    _sample!.Execute(
+                        PlayerMockManager.GetPlayerMock(1).State,
+                        PlayerMockManager.GetPlayerMock(0).State
+                    );
                     break;
                 default:
-                    throw new System.Exception("Invalid PlayerIndex");
+                    throw new Exception("Invalid PlayerIndex");
             }
+            
             return true;
         }
     }

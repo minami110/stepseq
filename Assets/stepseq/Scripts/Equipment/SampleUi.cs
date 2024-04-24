@@ -15,6 +15,9 @@ namespace stepseq
         private Renderer m_buttonRenderer = null!;
         
         [SerializeField]
+        private TextMesh m_nameText = null!;
+        
+        [SerializeField]
         private TextMesh m_priceText = null!;
         
         [SerializeField]
@@ -39,6 +42,7 @@ namespace stepseq
             SetButtonColor(new Color(0.18f, 0.5f, 0.22f));
             
             // Init TextMesh
+            m_nameText.text = _sampleBase.GetType().Name;
             m_priceText.text = $"${_sampleBase.Price.ToString()}";
         }
         

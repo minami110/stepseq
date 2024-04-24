@@ -266,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_buttonShader: {fileID: 4800000, guid: 7b73d20dea8e9e5439ec3b3ea3b7b7e4, type: 3}
   m_buttonRenderer: {fileID: 385234512766395061}
+  m_nameText: {fileID: 2974921707145223681}
   m_priceText: {fileID: 3379774467153240109}
   m_searchSampleSlotLayerMask:
     serializedVersion: 2

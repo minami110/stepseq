@@ -20,14 +20,14 @@ namespace stepseq
         [Range(1f, 1200f)]
         private float m_beatPerMinute = 30f;
         
-        private readonly ReactiveProperty<int> _activeTrack = new(-1);
-        
         private readonly ReactiveProperty<float> _currentTime = new(0f);
+        private readonly ReactiveProperty<int> _activeTrack = new(-1);
+        private readonly Subject<Unit> _onPlay = new();
         
         private bool _isPlaying;
         
-        public static ReadOnlyReactiveProperty<float> CurrentTime => GetInstance()._currentTime;
         public static ReadOnlyReactiveProperty<int> ActiveTrack => GetInstance()._activeTrack;
+        public static Observable<Unit> OnPlay => GetInstance()._onPlay;
         
         private void Awake()
         {
@@ -40,6 +40,8 @@ namespace stepseq
             
             _currentTime.Value = _STOP_TIME;
             _currentTime.RegisterTo(destroyCancellationToken);
+            _activeTrack.RegisterTo(destroyCancellationToken); 
+            _onPlay.RegisterTo(destroyCancellationToken);
         }
         
         private void Update()
@@ -56,6 +58,13 @@ namespace stepseq
                 {
                     _activeTrack.Value = (int)(_currentTime.Value / _END_TIME * _TRACK_COUNT);
                 }
+                
+                // Player それぞれの Stack を解決する
+                // ToDo: シードを適切に与える
+                var player0 = PlayerMockManager.GetPlayerMock(0);
+                var player1 = PlayerMockManager.GetPlayerMock(1);
+                player0.State.SolveHealth(0);
+                player1.State.SolveHealth(0);
             }
             else
             {
@@ -72,6 +81,17 @@ namespace stepseq
         public void Play()
         {
             _isPlaying = true;
+            
+            // Player の初期化
+            var player0 = PlayerMockManager.GetPlayerMock(0);
+            var player1 = PlayerMockManager.GetPlayerMock(1);
+            player0.State.Clear();
+            player0.State.AddStack(StackType.Health, 100f);
+            player1.State.Clear();
+            player1.State.AddStack(StackType.Health, 100f);
+            
+            // イベントの通知
+            _onPlay.OnNext(Unit.Default);
         }
         
         public void Stop()

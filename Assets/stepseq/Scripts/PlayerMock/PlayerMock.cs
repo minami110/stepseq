@@ -6,20 +6,35 @@ using UnityEngine;
 namespace stepseq
 {
     [DisallowMultipleComponent]
-    public class PlayerMock : MonoBehaviour, IEntity
+    public sealed class PlayerMock : MonoBehaviour
     {
         [SerializeField]
-        private RuntimeLogger m_logger = null!;
+        private EntityStateVis m_entityStateVis = null!;
         
         [SerializeField]
         private Transform m_animateRoot = null!;
         
-        private readonly EntityState _entityState = new();
+        [SerializeField]
+        private Shader m_shader = null!;
+        
+        [SerializeField]
+        private Renderer m_renderer = null!;
+        
+        private Material _material = null!;
+        
+        public EntityState State
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get;
+        } = new();
         
         private void Awake()
         {
-            m_logger.Log("");
-            _entityState.RegisterTo(destroyCancellationToken);
+            m_entityStateVis.SetEntityState(State);
+            State.RegisterTo(destroyCancellationToken);
+            
+            _material = new Material(m_shader);
+            m_renderer.sharedMaterial = _material;
         }
         
         // Update is called once per frame
@@ -31,14 +46,14 @@ namespace stepseq
             m_animateRoot.Rotate(Vector3.forward, 1f * Time.deltaTime);
         }
         
-        void IEntity.AddStack(StackType type, float amount)
+        private void OnDestroy()
         {
-            _entityState.AddStack(type, amount);
+            DestroyImmediate(_material);
         }
         
-        void IEntity.SolveHealth(int seed)
+        internal void SetBaseColor(in Color color)
         {
-            _entityState.SolveHealth(seed);
+            _material.color = color;
         }
     }
 }

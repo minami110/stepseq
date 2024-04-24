@@ -155,5 +155,19 @@ namespace stepseq
                 _healthRp.Value -= healthDamage;
             }
         }
+        
+        public void Clear()
+        {
+            // Base
+            _healthRp.Value = 0;
+            // Buff
+            _shieldRp.Value = 0;
+            _luckRp.Value = 0;
+            _lifeSteal.Value = 0;
+            // DeBuff
+            _healthDamageRp.Value = 0;
+            _shieldDamageRp.Value = 0;
+            _poisonRp.Value = 0;
+        }
     }
 }

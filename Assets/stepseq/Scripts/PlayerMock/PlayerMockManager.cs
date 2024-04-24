@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using Edanoue.Rx;
 using UnityEngine;
 
 namespace stepseq
@@ -10,9 +9,7 @@ namespace stepseq
     [DisallowMultipleComponent]
     public class PlayerMockManager : MonoBehaviour
     {
-        private static   PlayerMockManager? _instance;
-        
-        private int _currentPlayerIndex = -1;
+        private static PlayerMockManager? _instance;
         
         [SerializeField]
         private TextMesh m_playerIndexText = null!;
@@ -29,15 +26,7 @@ namespace stepseq
         [SerializeField]
         private GameObject m_playerSlotRoot1 = null!;
         
-        public static PlayerMock GetPlayerMock(int index)
-        {
-            return index switch
-            {
-                0 => GetInstance().m_player0,
-                1 => GetInstance().m_player1,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
+        private int _currentPlayerIndex = -1;
         
         private void Awake()
         {
@@ -50,12 +39,13 @@ namespace stepseq
             
             // Initialize the slot
             var a = m_playerSlotRoot0.GetComponentsInChildren<SampleSlot>(true);
-            foreach(var slot in a)
+            foreach (var slot in a)
             {
                 slot.PlayerIndex = 0;
             }
+            
             var b = m_playerSlotRoot1.GetComponentsInChildren<SampleSlot>(true);
-            foreach(var slot in b)
+            foreach (var slot in b)
             {
                 slot.PlayerIndex = 1;
             }
@@ -69,6 +59,16 @@ namespace stepseq
         private void OnDestroy()
         {
             _instance = null;
+        }
+        
+        public static PlayerMock GetPlayerMock(int index)
+        {
+            return index switch
+            {
+                0 => GetInstance().m_player0,
+                1 => GetInstance().m_player1,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
         
         /// <summary>
@@ -94,11 +94,15 @@ namespace stepseq
             {
                 m_playerSlotRoot0.SetActive(true);
                 m_playerSlotRoot1.SetActive(false);
+                m_player0.SetBaseColor(new Color(0.27f, 0.24f, 0.13f));
+                m_player1.SetBaseColor(new Color(0.33f, 0.33f, 0.33f, 0.84f));
             }
             else
             {
                 m_playerSlotRoot0.SetActive(false);
                 m_playerSlotRoot1.SetActive(true);
+                m_player0.SetBaseColor(new Color(0.33f, 0.33f, 0.33f, 0.84f));
+                m_player1.SetBaseColor(new Color(0.27f, 0.24f, 0.13f));
             }
         }
         
