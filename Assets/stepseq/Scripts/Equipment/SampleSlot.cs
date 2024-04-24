@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -7,7 +8,10 @@ namespace stepseq
     [RequireComponent(typeof(BoxCollider))]
     public class SampleSlot : MonoBehaviour
     {
-        private Sample? _sample;
+        private SampleBase? _sample;
+        
+        // ToDO: 適当
+        internal int PlayerIndex = -1;
         
         private bool IsEmpty
         {
@@ -15,7 +19,7 @@ namespace stepseq
             get => _sample == null;
         }
         
-        internal void ReleaseMe(Sample sample)
+        internal void ReleaseMe(SampleBase sample)
         {
             if (_sample == sample)
             {
@@ -23,7 +27,7 @@ namespace stepseq
             }
         }
         
-        public bool AssignSample(Sample sample)
+        public bool AssignSample(SampleBase sample)
         {
             if (!IsEmpty)
             {
@@ -31,7 +35,7 @@ namespace stepseq
             }
             
             _sample = sample;
-            _sample.OnAssignedSlot(this);
+            _sample.OnAssignedSampleSlot(this);
             return true;
         }
         
@@ -42,7 +46,24 @@ namespace stepseq
                 return false;
             }
             
-            _sample!.Execute();
+            switch (PlayerIndex)
+            {
+                case 0:
+                    _sample!.Execute(
+                        PlayerMockManager.GetPlayerMock(0).State,
+                        PlayerMockManager.GetPlayerMock(1).State
+                    );
+                    break;
+                case 1:
+                    _sample!.Execute(
+                        PlayerMockManager.GetPlayerMock(1).State,
+                        PlayerMockManager.GetPlayerMock(0).State
+                    );
+                    break;
+                default:
+                    throw new Exception("Invalid PlayerIndex");
+            }
+            
             return true;
         }
     }
