@@ -11,7 +11,12 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return "相手のシールド値だけ体力を回復";
+            return "相手のシールド値だけ体力を回復\nCategory: None";
+        }
+        
+        protected override CategoryType GetCategoryType()
+        {
+            return CategoryType.None;
         }
         
         public override void Execute(EntityState from, EntityState to)

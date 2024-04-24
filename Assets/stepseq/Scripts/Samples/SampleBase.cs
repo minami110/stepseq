@@ -25,6 +25,12 @@ namespace stepseq
             get => GetHintText();
         }
         
+        public CategoryType Category
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCategoryType();
+        }
+        
         internal bool TryBuy()
         {
             // ToDo: 所持金のチェック (現在は未実装)
@@ -66,6 +72,8 @@ namespace stepseq
         protected abstract int GetPrice();
         
         protected abstract string GetHintText();
+        
+        protected abstract CategoryType GetCategoryType();
         
         public abstract void Execute(EntityState from, EntityState to);
     }

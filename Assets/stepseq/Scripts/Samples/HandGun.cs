@@ -24,7 +24,12 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return $"10 ダメージを与える. 残り: {_count} 発";
+            return $"10 ダメージを与える. 残り: {_count} 発\nCategory: Fly, Fire";
+        }
+        
+        protected override CategoryType GetCategoryType()
+        {
+            return CategoryType.Fly | CategoryType.Fire;
         }
         
         public override void Execute(EntityState from, EntityState to)

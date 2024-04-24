@@ -11,7 +11,12 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return "10 シールドを得る";
+            return "10 シールドを得る\nCategory: Fly";
+        }
+        
+        protected override CategoryType GetCategoryType()
+        {
+            return CategoryType.Fly;
         }
         
         public override void Execute(EntityState from, EntityState to)
