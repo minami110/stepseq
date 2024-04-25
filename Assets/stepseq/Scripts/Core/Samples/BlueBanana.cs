@@ -4,6 +4,8 @@ namespace stepseq
 {
     public sealed class BlueBanana : SampleBase
     {
+        private static readonly CategoryType[] _categories = { CategoryType.Nature };
+        
         protected override int GetPrice()
         {
             return 10;
@@ -14,9 +16,9 @@ namespace stepseq
             return "相手のシールド値だけ体力を回復\nCategory: None";
         }
         
-        protected override CategoryType GetCategoryType()
+        protected override CategoryType[] GetCategories()
         {
-            return CategoryType.None;
+            return _categories;
         }
         
         public override void Execute(EntityState from, EntityState to)

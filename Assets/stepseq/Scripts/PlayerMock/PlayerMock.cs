@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Edanoue.Rx;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace stepseq
         [SerializeField]
         private Renderer m_renderer = null!;
         
-        private Material _material = null!;
+        private MaterialWrapper _material = null!;
         
         public EntityState State
         {
@@ -32,7 +33,8 @@ namespace stepseq
             m_entityStateVis.SetEntityState(State);
             State.RegisterTo(destroyCancellationToken);
             
-            _material = new Material(m_shader);
+            _material = new MaterialWrapper(m_shader);
+            _material.RegisterTo(destroyCancellationToken);
             m_renderer.sharedMaterial = _material;
         }
         
@@ -45,14 +47,9 @@ namespace stepseq
             m_animateRoot.Rotate(Vector3.forward, 1f * Time.deltaTime);
         }
         
-        private void OnDestroy()
-        {
-            DestroyImmediate(_material);
-        }
-        
         internal void SetBaseColor(in Color color)
         {
-            _material.color = color;
+            _material.SetColor(in color);
         }
     }
 }

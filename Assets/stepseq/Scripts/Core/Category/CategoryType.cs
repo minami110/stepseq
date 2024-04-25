@@ -5,14 +5,14 @@ using System;
 namespace stepseq
 {
     /// <summary>
-    /// 
+    /// シナジーのカテゴリー種族を定義 
     /// </summary>
-    [Flags]
-    public enum CategoryType: int
+    public enum CategoryType
     {
         None = 0,
-        Fire = 1 << 0,
-        Fly  = 1 << 1,
-        Tree = 1 << 2
+        Fire,
+        Fly,
+        Nature,
+        // ここから下に追加していく
     }
 }

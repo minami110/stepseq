@@ -1,5 +1,8 @@
+using System;
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Edanoue.Rx;
 using UnityEngine;
 
 namespace stepseq
@@ -8,6 +11,9 @@ namespace stepseq
     [RequireComponent(typeof(BoxCollider))]
     internal sealed class SampleUi : MonoBehaviour, IDraggable
     {
+        [SerializeField]
+        private string m_sampleTypeName = string.Empty;
+        
         [SerializeField]
         private Shader m_buttonShader = null!;
         
@@ -21,6 +27,9 @@ namespace stepseq
         private TextMesh m_priceText = null!;
         
         [SerializeField]
+        private TextMesh m_categoryText = null!;
+        
+        [SerializeField]
         private LayerMask m_searchSampleSlotLayerMask = 0;
         
         private Vector3? _dragStartPosition;
@@ -31,8 +40,15 @@ namespace stepseq
         
         private void Awake()
         {
-            // Get sibling component
-            _sampleBase = GetComponent<SampleBase>();
+            // Sample のインスタンスを作成する
+            // 文字列から型を検索してクラスを生成する
+            var type = Type.GetType("stepseq." + m_sampleTypeName);
+            if (type == null)
+            {
+                throw new InvalidOperationException($"Type not found: {m_sampleTypeName}");
+            }
+            _sampleBase = (SampleBase)Activator.CreateInstance(type);
+            _sampleBase.RegisterTo(destroyCancellationToken);
             
             // Init Material
             _material = new Material(m_buttonShader);
@@ -44,6 +60,8 @@ namespace stepseq
             // Init TextMesh
             m_nameText.text = _sampleBase.GetType().Name;
             m_priceText.text = $"${_sampleBase.Price.ToString()}";
+            var categories = _sampleBase.Categories;
+            m_categoryText.text = categories.Length > 0 ? string.Join(", ", categories) : "None";
         }
         
         private void OnDestroy()
@@ -107,11 +125,43 @@ namespace stepseq
                 SetButtonColor(new Color(0.18f, 0.5f, 0.22f));
                 
                 //購入確定エリア(インベントリ内) なら購入する, 購入に失敗したら元の場所に戻す
-                if (_sampleBase.TryBuy() == false)
+                if (SearchSlotAndAssign() == false)
                 {
                     transform.position = restPosition;
                 }
             }
+        }
+        
+        private bool SearchSlotAndAssign()
+        {
+            var result = false;
+            var results = ArrayPool<Collider>.Shared.Rent(16);
+            var count = Physics.OverlapSphereNonAlloc(
+                transform.position,
+                0.1f,
+                results,
+                m_searchSampleSlotLayerMask,
+                QueryTriggerInteraction.Collide);
+            var resultsAsSpan = results.AsSpan(0, count);
+            foreach (var col in resultsAsSpan)
+            {
+                if (!col.TryGetComponent(out SampleSlot slot))
+                {
+                    continue;
+                }
+                
+                if (!_sampleBase.AssignToSlot(slot))
+                {
+                    continue;
+                }
+                
+                result = true;
+                transform.position = slot.transform.position;
+                break;
+            }
+            
+            ArrayPool<Collider>.Shared.Return(results);
+            return result;
         }
         
         private async Awaitable TrackMousePositionLoopAsync(CancellationToken token)

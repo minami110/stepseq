@@ -13,7 +13,6 @@ namespace stepseq
         // DeBuff stack
         private readonly ReactiveProperty<float> _healthDamageRp = new();
         
-        // Base stack
         private readonly ReactiveProperty<float> _healthRp       = new();
         private readonly ReactiveProperty<float> _maxHealthRp    = new();
         private readonly ReactiveProperty<float> _lifeSteal      = new();

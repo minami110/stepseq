@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace stepseq
 {
-    [DisallowMultipleComponent]
-    public abstract class SampleBase : MonoBehaviour
+    public abstract class SampleBase : IDisposable
     {
         private SampleSlot? _assignedSlot;
         
@@ -25,37 +24,17 @@ namespace stepseq
             get => GetHintText();
         }
         
-        public CategoryType Category
+        public CategoryType[] Categories
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCategoryType();
+            get => GetCategories();
         }
         
-        internal bool TryBuy()
+        internal bool AssignToSlot(SampleSlot slot)
         {
             // ToDo: 所持金のチェック (現在は未実装)
-            
-            var success = false;
-            var results = ArrayPool<Collider>.Shared.Rent(16);
-            var count = Physics.OverlapSphereNonAlloc(transform.position, 0.1f, results,
-                1 << LayerMask.NameToLayer("Default"),
-                QueryTriggerInteraction.Collide);
-            var resultsAsSpan = results.AsSpan(0, count);
-            foreach (var col in resultsAsSpan)
-            {
-                if (col.TryGetComponent(out SampleSlot slot))
-                {
-                    if (slot.AssignSample(this))
-                    {
-                        // ToDo: 所持金の現象 (現在は未実装)
-                        success = true;
-                        break;
-                    }
-                }
-            }
-            
-            ArrayPool<Collider>.Shared.Return(results);
-            return success;
+            // ToDo: 所持金の現象 (現在は未実装)
+            return slot.AssignSample(this);
         }
         
         internal void OnAssignedSampleSlot(SampleSlot slot)
@@ -66,15 +45,18 @@ namespace stepseq
             }
             
             _assignedSlot = slot;
-            transform.position = _assignedSlot.transform.position;
         }
         
         protected abstract int GetPrice();
         
         protected abstract string GetHintText();
         
-        protected abstract CategoryType GetCategoryType();
+        protected abstract CategoryType[] GetCategories();
         
         public abstract void Execute(EntityState from, EntityState to);
+        
+        public virtual void Dispose()
+        {
+        }
     }
 }

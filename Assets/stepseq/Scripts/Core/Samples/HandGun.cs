@@ -1,20 +1,21 @@
 ﻿// Copyright Edanoue, Inc. All Rights Reserved.
 
+using System;
 using Edanoue.Rx;
 
 namespace stepseq
 {
     public sealed class HandGun : SampleBase
     {
-        private const int _MAX_COUNT = 8;
+        private const           int            _MAX_COUNT  = 8;
+        private                 int            _count      = _MAX_COUNT;
+        private static readonly CategoryType[] _categories = { CategoryType.Fire, CategoryType.Fly };
+        private readonly        IDisposable    _eventManagerSubscription;
         
-        private int _count = _MAX_COUNT;
-        
-        private void Awake()
+        public HandGun()
         {
-            TimeManager.OnPlay
-                .Subscribe(this, (_, state) => { _count = _MAX_COUNT; })
-                .RegisterTo(destroyCancellationToken);
+            _eventManagerSubscription = TimeManager.OnPlay
+                .Subscribe(this, (_, state) => { _count = _MAX_COUNT; });
         }
         
         protected override int GetPrice()
@@ -27,9 +28,9 @@ namespace stepseq
             return $"10 ダメージを与える. 残り: {_count} 発\nCategory: Fly, Fire";
         }
         
-        protected override CategoryType GetCategoryType()
+        protected override CategoryType[] GetCategories()
         {
-            return CategoryType.Fly | CategoryType.Fire;
+            return _categories;
         }
         
         public override void Execute(EntityState from, EntityState to)
@@ -42,6 +43,11 @@ namespace stepseq
             _count--;
             // 相手にダメージ 10 を与える
             EffectManager.AddEffect<TakeHealthDamage>(to, 10f);
+        }
+        
+        public override void Dispose()
+        {
+            _eventManagerSubscription.Dispose();
         }
     }
 }

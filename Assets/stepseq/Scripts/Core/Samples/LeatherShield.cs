@@ -4,6 +4,9 @@ namespace stepseq
 {
     public sealed class LeatherShield : SampleBase
     {
+        // Category: None
+        private static readonly CategoryType[] _categories = { };
+        
         protected override int GetPrice()
         {
             return 5;
@@ -14,9 +17,9 @@ namespace stepseq
             return "10 シールドを得る\nCategory: Fly";
         }
         
-        protected override CategoryType GetCategoryType()
+        protected override CategoryType[] GetCategories()
         {
-            return CategoryType.Fly;
+            return _categories;
         }
         
         public override void Execute(EntityState from, EntityState to)
