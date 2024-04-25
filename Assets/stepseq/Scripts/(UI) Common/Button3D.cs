@@ -25,7 +25,7 @@ namespace stepseq
         private string m_hintText = string.Empty;
         
         private Material _material = null!;
-        private bool _onClickReserved;
+        private bool     _onClickReserved;
         
         private void Awake()
         {

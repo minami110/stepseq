@@ -61,6 +61,11 @@ namespace stepseq
                     state.State.Clear();
                     state.State.AddStack(StackType.AddHealth, _DEFAULT_HEALTH);
                     state.State.AddStack(StackType.AddMaxHealth, _DEFAULT_HEALTH);
+                    
+                    // Category (シナジー) を解決する
+                    state.SampleStore.SolveCategoryEffects(state.State);
+                    
+                    // Stack の解決
                     state.State.Solve(0);
                 })
                 .RegisterTo(destroyCancellationToken);

@@ -7,6 +7,9 @@ namespace stepseq
         AddHealth,
         AddMaxHealth,
         AddShield,
+        AddAttackMultiplier,
+        AddHealMultiplier,
+        AddEvasion,
         SubHealth,
         SubMaxHealth,
         SubShield

@@ -44,7 +44,7 @@ namespace stepseq
             return true;
         }
         
-        public void Solve()
+        public void SolveCategoryEffects(PlayerState from)
         {
             foreach (var (category, count) in _categoryDict)
             {
@@ -61,9 +61,11 @@ namespace stepseq
                         {
                             case >= 5:
                                 // Fire が 5 以上あれば 攻撃力を 100% 上昇させる
+                                EffectManager.AddEffect<AddAttackMultiplier>(from, 1.0f);
                                 break;
                             case >= 2:
                                 // Fire が 2 以上あれば 攻撃力を 10% 上昇させる
+                                EffectManager.AddEffect<AddAttackMultiplier>(from, 0.1f);
                                 break;
                         }
                         
@@ -74,9 +76,15 @@ namespace stepseq
                         {
                             case >= 3:
                                 // Fly が 3 以上あれば 50% の確率で相手の直接攻撃を避ける, HP を 100 上昇
+                                EffectManager.AddEffect<AddEvasion>(from, 0.5f);
+                                EffectManager.AddEffect<AddMaxHealth>(from, 100f);
+                                EffectManager.AddEffect<AddHealth>(from, 100f);
                                 break;
                             case >= 1:
                                 // Fly が 1 以上あれば 10% の確率で相手の直接攻撃を避ける, HP を 50 上昇
+                                EffectManager.AddEffect<AddEvasion>(from, 0.1f);
+                                EffectManager.AddEffect<AddMaxHealth>(from, 50f);
+                                EffectManager.AddEffect<AddHealth>(from, 50f);
                                 break;
                         }
                         
@@ -86,9 +94,11 @@ namespace stepseq
                         {
                             case >= 3:
                                 // Nature が 3 以上あれば 回復量を 100% 上昇させる
+                                EffectManager.AddEffect<AddHealMultiplier>(from, 1.0f);
                                 break;
                             case >= 1:
                                 // Nature が 1 以上あれば 回復量を 20% 上昇させる
+                                EffectManager.AddEffect<AddHealMultiplier>(from, 0.2f);
                                 break;
                         }
                         

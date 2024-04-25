@@ -2,6 +2,7 @@
 
 using System;
 using Edanoue.Rx;
+using Random = UnityEngine.Random;
 
 namespace stepseq
 {
@@ -40,9 +41,17 @@ namespace stepseq
                 return;
             }
             
+            // 相手が回避するかどうかを計算する
+            var rate = to.Evasion;
+            if (rate > 0.0f && Random.value < rate)
+            {
+                return;
+            }
+            
             _count--;
             // 相手にダメージ 10 を与える
-            EffectManager.AddEffect<SubHealth>(to, 10f);
+            var value = 10.0f * from.AttackMultiplier;
+            EffectManager.AddEffect<SubHealth>(to, value);
         }
         
         public override void Dispose()

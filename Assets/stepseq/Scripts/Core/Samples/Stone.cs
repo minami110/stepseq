@@ -1,5 +1,7 @@
 ﻿// Copyright Edanoue, Inc. All Rights Reserved.
 
+using UnityEngine;
+
 namespace stepseq
 {
     public sealed class Stone : SampleBase
@@ -23,6 +25,13 @@ namespace stepseq
         
         public override void Execute(PlayerState from, PlayerState to)
         {
+            // 相手が回避するかどうかを計算する
+            var rate = to.Evasion;
+            if (rate > 0.0f && Random.value < rate)
+            {
+                return;
+            }
+            
             var value = 5.0f * from.AttackMultiplier;
             EffectManager.AddEffect<SubHealth>(to, value);
         }

@@ -21,8 +21,20 @@ namespace stepseq
         private float _subMaxHealthStack;
         private float _subShieldStack;
         
-        public float HealMultiplier = 1.0f;
+        /// <summary>
+        /// 攻撃の倍率
+        /// </summary>
         public float AttackMultiplier = 1.0f;
+        
+        /// <summary>
+        /// 回避率
+        /// </summary>
+        public float Evasion;
+        
+        /// <summary>
+        /// 回復の倍率
+        /// </summary>
+        public float HealMultiplier = 1.0f;
         
         public ReadOnlyReactiveProperty<float> Health
         {
@@ -67,6 +79,21 @@ namespace stepseq
                 case StackType.AddShield:
                 {
                     _addShieldStack += amount;
+                    break;
+                }
+                case StackType.AddAttackMultiplier:
+                {
+                    AttackMultiplier += amount;
+                    break;
+                }
+                case StackType.AddHealMultiplier:
+                {
+                    HealMultiplier += amount;
+                    break;
+                }
+                case StackType.AddEvasion:
+                {
+                    Evasion += amount;
                     break;
                 }
                 case StackType.SubHealth:
@@ -150,6 +177,12 @@ namespace stepseq
             _subHealthStack = 0;
             _subMaxHealthStack = 0;
             _subShieldStack = 0;
+            
+            Evasion = 0f;
+            
+            // Multiplier
+            HealMultiplier = 1.0f;
+            AttackMultiplier = 1.0f;
         }
     }
 }
