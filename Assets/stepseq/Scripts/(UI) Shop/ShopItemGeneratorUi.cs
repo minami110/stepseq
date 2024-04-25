@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -22,7 +20,7 @@ namespace stepseq
         }
         
         /// <summary>
-        /// ショップにアイテムを生成 (リロール) 
+        /// ショップにアイテムを生成 (リロール)
         /// </summary>
         /// <param name="count"></param>
         public void Generate(int count = 9)
@@ -34,14 +32,14 @@ namespace stepseq
             }
             
             // 指定された個数のアイテムをショップ内に生成する
-            float span = 1.7f;
+            var span = 1.7f;
             for (var i = 0; i < count; i++)
             {
                 var prefab = m_shopItemPrefabs[Random.Range(0, m_shopItemPrefabs.Count)];
                 var go = Instantiate(prefab, m_itemRootTransform);
                 
                 // 3つごとに Y を 下げる
-                go.transform.localPosition = new Vector3((i % 3) * span, -Mathf.Floor(i / 3) * span, 0);
+                go.transform.localPosition = new Vector3(i % 3 * span, -Mathf.Floor(i / 3) * span, 0);
             }
         }
     }

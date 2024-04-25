@@ -32,10 +32,11 @@ namespace stepseq
         [SerializeField]
         private LayerMask m_searchSampleSlotLayerMask = 0;
         
-        private Vector3? _dragStartPosition;
-        private Material _material = null!;
+        private Vector3?   _dragStartPosition;
+        private Material   _material   = null!;
+        private SampleBase _sampleBase = null!;
         
-        private SampleBase               _sampleBase = null!;
+        private State                    _state = State.IN_SHOP;
         private CancellationTokenSource? _trackMouseCts;
         
         private void Awake()
@@ -126,16 +127,17 @@ namespace stepseq
                 SetButtonColor(new Color(0.18f, 0.5f, 0.22f));
                 
                 //購入確定エリア(インベントリ内) なら購入する, 購入に失敗したら元の場所に戻す
-                if (SearchSlotAndAssign() == false)
+                if (SearchSlotAndAssign() == 0)
                 {
                     transform.position = restPosition;
                 }
             }
         }
         
-        private bool SearchSlotAndAssign()
+        private int SearchSlotAndAssign()
         {
-            var result = false;
+            var result = 0;
+            
             var results = ArrayPool<Collider>.Shared.Rent(16);
             var count = Physics.OverlapSphereNonAlloc(
                 transform.position,
@@ -146,28 +148,47 @@ namespace stepseq
             var resultsAsSpan = results.AsSpan(0, count);
             foreach (var col in resultsAsSpan)
             {
-                if (!col.TryGetComponent(out SampleSlot slot))
+                // Sample Slot の上で離した場合
+                if (col.TryGetComponent(out SampleSlot slot))
                 {
-                    continue;
+                    if (!_sampleBase.AssignToSlot(slot))
+                    {
+                        continue;
+                    }
+                    
+                    // 購入確定
+                    result = 1;
+                    
+                    // State を更新する
+                    if (_state == State.IN_SHOP)
+                    {
+                        _state = State.IN_PLYAER_SLOT;
+                    }
+                    
+                    // ショップに消されるので, ショップから抜けておく
+                    var trs = transform;
+                    trs.SetParent(slot.transform);
+                    
+                    // もうショップにないので, Price を消しておく
+                    m_priceText.text = string.Empty;
+                    
+                    // Slot の位置に移動しておく
+                    trs.position = slot.transform.position;
+                    break;
                 }
                 
-                if (!_sampleBase.AssignToSlot(slot))
+                // ShopSellTriggerUi の上で離した場合
+                if (col.TryGetComponent(out ShopSellTriggerUi sellTrigger))
                 {
-                    continue;
+                    if (_state == State.IN_PLYAER_SLOT)
+                    {
+                        // プレイヤーの所持品の状態で売られた
+                        result = 2;
+                        _sampleBase.Sell();
+                        Destroy(gameObject);
+                        break;
+                    }
                 }
-                
-                result = true;
-                
-                // ショップに消されるので, ショップから抜けておく
-                var trs = transform;
-                trs.SetParent(slot.transform);
-                
-                // もうショップにないので, Price を消しておく
-                m_priceText.text = string.Empty;
-                
-                // Slot の位置に移動しておく
-                trs.position = slot.transform.position;
-                break;
             }
             
             ArrayPool<Collider>.Shared.Return(results);
@@ -187,6 +208,12 @@ namespace stepseq
         private void SetButtonColor(in Color color)
         {
             _material.color = color;
+        }
+        
+        private enum State
+        {
+            IN_SHOP,
+            IN_PLYAER_SLOT
         }
     }
 }

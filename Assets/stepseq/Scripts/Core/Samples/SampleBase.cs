@@ -49,6 +49,17 @@ namespace stepseq
             _assignedSlot = slot;
         }
         
+        internal void Sell()
+        {
+            if (_assignedSlot != null)
+            {
+                _assignedSlot.ReleaseMe(this);
+                _assignedSlot = null;
+                
+                // ToDo: 所持金に還元する
+            }
+        }
+        
         protected abstract int GetPrice();
         
         protected abstract string GetHintText();

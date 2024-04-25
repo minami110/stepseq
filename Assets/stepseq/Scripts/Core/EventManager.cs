@@ -17,7 +17,7 @@ namespace stepseq
         public static readonly Subject<Unit> OnBattleEnd = new();
         
         /// <summary>
-        /// バトル中の QuantizeTime (ステムの位置) の値 
+        /// バトル中の QuantizeTime (ステムの位置) の値
         /// </summary>
         public static readonly ReactiveProperty<int> QuantizeTime = new();
         
@@ -27,7 +27,7 @@ namespace stepseq
         public static readonly Subject<Unit> OnPostUpdateQuantizeTime = new();
         
         /// <summary>
-        /// バトル中の LoopCount (トラックのループ数) の値  
+        /// バトル中の LoopCount (トラックのループ数) の値
         /// </summary>
         public static readonly ReactiveProperty<int> LoopCount = new();
     }

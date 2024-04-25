@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Edanoue.Rx;
 using UnityEngine;
@@ -22,6 +21,13 @@ namespace stepseq
         private float                    _currentTime;
         private CancellationTokenSource? _isPlayingCts;
         
+        private void Awake()
+        {
+            _currentTime = _STOP_TIME;
+            EventManager.QuantizeTime.Value = -1;
+            EventManager.LoopCount.Value = -1;
+        }
+        
         private void OnDestroy()
         {
             if (_isPlayingCts is null)
@@ -32,13 +38,6 @@ namespace stepseq
             _isPlayingCts.Cancel();
             _isPlayingCts.Dispose();
             _isPlayingCts = null;
-        }
-        
-        private void Awake()
-        {
-            _currentTime = _STOP_TIME;
-            EventManager.QuantizeTime.Value = -1;
-            EventManager.LoopCount.Value = -1;
         }
         
         public void Play()
