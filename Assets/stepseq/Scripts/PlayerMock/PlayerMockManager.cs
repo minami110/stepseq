@@ -38,16 +38,16 @@ namespace stepseq
             _instance = this;
             
             // Initialize the slot
-            var a = m_playerSlotRoot0.GetComponentsInChildren<SampleSlot>(true);
-            foreach (var slot in a)
+            foreach (var playerGuiRoot in new[] { m_playerSlotRoot0, m_playerSlotRoot1 })
             {
-                slot.PlayerIndex = 0;
-            }
-            
-            var b = m_playerSlotRoot1.GetComponentsInChildren<SampleSlot>(true);
-            foreach (var slot in b)
-            {
-                slot.PlayerIndex = 1;
+                var slots = playerGuiRoot.GetComponentsInChildren<SampleSlot>(true);
+                foreach (var slot in slots)
+                {
+                    slot.PlayerIndex = playerGuiRoot == m_playerSlotRoot0 ? 0 : 1;
+                }
+                
+                var categoryVis = playerGuiRoot.GetComponentInChildren<CategoryVizUi>(true);
+                categoryVis.Init(playerGuiRoot == m_playerSlotRoot0 ? 0 : 1);
             }
         }
         

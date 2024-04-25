@@ -4,16 +4,14 @@ namespace stepseq
 {
     public enum StackType
     {
-        // Buff
-        Health,
-        MaxHealth,
-        Shield,
-        Luck,
-        LifeSteal,
-        
-        // DeBuff
-        HealthDamage,
-        ShieldDamage,
-        Poison
+        AddHealth,
+        AddMaxHealth,
+        AddShield,
+        AddAttackMultiplier,
+        AddHealMultiplier,
+        AddEvasion,
+        SubHealth,
+        SubMaxHealth,
+        SubShield
     }
 }

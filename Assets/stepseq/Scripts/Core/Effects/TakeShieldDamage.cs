@@ -6,7 +6,7 @@ namespace stepseq
     {
         internal override void Execute(IEntity target, object arg0)
         {
-            target.AddStack(StackType.ShieldDamage, (float)arg0);
+            target.AddStack(StackType.SubShield, (float)arg0);
         }
     }
 }
