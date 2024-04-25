@@ -24,7 +24,17 @@ namespace stepseq
         
         private MaterialWrapper _material = null!;
         
-        public EntityState State
+        /// <summary>
+        /// </summary>
+        public PlayerState State
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get;
+        } = new();
+        
+        /// <summary>
+        /// </summary>
+        public SampleStore SampleStore
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get;
@@ -32,8 +42,12 @@ namespace stepseq
         
         private void Awake()
         {
+            // Stack Store
             m_entityStateVis.SetEntityState(State);
             State.RegisterTo(destroyCancellationToken);
+            
+            // Sample Store
+            SampleStore.RegisterTo(destroyCancellationToken);
             
             _material = new MaterialWrapper(m_shader);
             _material.RegisterTo(destroyCancellationToken);
@@ -72,6 +86,16 @@ namespace stepseq
         internal void SetBaseColor(in Color color)
         {
             _material.SetColor(in color);
+        }
+        
+        internal void AddSample(SampleBase sample)
+        {
+            SampleStore.Add(sample);
+        }
+        
+        internal void RemoveSample(SampleBase sample)
+        {
+            SampleStore.Remove(sample);
         }
     }
 }

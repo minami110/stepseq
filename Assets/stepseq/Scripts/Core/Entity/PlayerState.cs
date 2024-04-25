@@ -8,7 +8,7 @@ namespace stepseq
 {
     /// <summary>
     /// </summary>
-    public sealed class EntityState : IEntity, IDisposable
+    public sealed class PlayerState : IEntity, IDisposable
     {
         private readonly ReactiveProperty<float> _healthRp    = new();
         private readonly ReactiveProperty<float> _maxHealthRp = new();
@@ -20,6 +20,9 @@ namespace stepseq
         private float _subHealthStack;
         private float _subMaxHealthStack;
         private float _subShieldStack;
+        
+        public float HealMultiplier = 1.0f;
+        public float AttackMultiplier = 1.0f;
         
         public ReadOnlyReactiveProperty<float> Health
         {

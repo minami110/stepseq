@@ -90,7 +90,12 @@ namespace stepseq
                 }
                 else
                 {
-                    EventManager.QuantizeTime.Value = (int)(_currentTime / _END_TIME * _TRACK_COUNT);
+                    var quantizeTime = (int)(_currentTime / _END_TIME * _TRACK_COUNT);
+                    if (EventManager.QuantizeTime.Value != quantizeTime)
+                    {
+                        EventManager.QuantizeTime.Value = quantizeTime;
+                        EventManager.OnPostUpdateQuantizeTime.OnNext(Unit.Default);
+                    }
                 }
             }
         }

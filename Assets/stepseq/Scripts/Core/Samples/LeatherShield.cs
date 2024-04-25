@@ -22,7 +22,7 @@ namespace stepseq
             return _categories;
         }
         
-        public override void Execute(EntityState from, EntityState to)
+        public override void Execute(PlayerState from, PlayerState to)
         {
             // 実行者にシールド 10 を与える
             EffectManager.AddEffect<TakeShield>(from, 10f);

@@ -2,18 +2,18 @@
 
 namespace stepseq
 {
-    public sealed class BlueBanana : SampleBase
+    public sealed class Stone : SampleBase
     {
         private static readonly CategoryType[] _categories = { CategoryType.Nature };
         
         protected override int GetPrice()
         {
-            return 10;
+            return 1;
         }
         
         protected override string GetHintText()
         {
-            return "自身の体力を 5 回復";
+            return "相手に 5 ダメージ";
         }
         
         protected override CategoryType[] GetCategories()
@@ -23,8 +23,8 @@ namespace stepseq
         
         public override void Execute(PlayerState from, PlayerState to)
         {
-            var value = 5.0f * from.HealMultiplier;
-            EffectManager.AddEffect<AddHealth>(from, value);
+            var value = 5.0f * from.AttackMultiplier;
+            EffectManager.AddEffect<SubHealth>(to, value);
         }
     }
 }

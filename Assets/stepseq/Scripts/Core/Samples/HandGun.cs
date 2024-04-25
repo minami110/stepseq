@@ -33,7 +33,7 @@ namespace stepseq
             return _categories;
         }
         
-        public override void Execute(EntityState from, EntityState to)
+        public override void Execute(PlayerState from, PlayerState to)
         {
             if (_count <= 0)
             {

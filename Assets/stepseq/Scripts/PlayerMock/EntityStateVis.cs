@@ -16,24 +16,24 @@ namespace stepseq
         [SerializeField]
         private TextMesh m_textShield = null!;
         
-        private EntityState _entityState = null!;
+        private PlayerState _playerState = null!;
         
-        internal void SetEntityState(EntityState entityState)
+        internal void SetEntityState(PlayerState playerState)
         {
-            _entityState = entityState;
+            _playerState = playerState;
             
             // Bind Health
-            _entityState.Health
+            _playerState.Health
                 .Subscribe(this, (x, state) => { state.m_textHealth.text = $"Health: {x}"; })
                 .RegisterTo(destroyCancellationToken);
             
             // Bind MaxHealth
-            _entityState.MaxHealth
+            _playerState.MaxHealth
                 .Subscribe(this, (x, state) => { state.m_textMaxHealth.text = $"{x}"; })
                 .RegisterTo(destroyCancellationToken);
             
             // Bind Shield
-            _entityState.Shield
+            _playerState.Shield
                 .Subscribe(this, (x, state) => { state.m_textShield.text = $"Shield: {x}"; })
                 .RegisterTo(destroyCancellationToken);
         }

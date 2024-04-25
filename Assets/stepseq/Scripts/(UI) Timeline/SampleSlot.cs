@@ -24,6 +24,7 @@ namespace stepseq
             if (_sample == sample)
             {
                 _sample = null;
+                PlayerMockManager.GetPlayerMock(PlayerIndex).RemoveSample(sample);
             }
         }
         
@@ -36,6 +37,7 @@ namespace stepseq
             
             _sample = sample;
             _sample.OnAssignedSampleSlot(this);
+            PlayerMockManager.GetPlayerMock(PlayerIndex).AddSample(sample);
             return true;
         }
         

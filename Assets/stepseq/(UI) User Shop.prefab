@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 146035661654135190}
   - component: {fileID: 934693520747233053}
   m_Layer: 0
-  m_Name: (UI) Shop
+  m_Name: (UI) User Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   - {fileID: 6456108063403224712, guid: e3ba483a42a33a74992dd806de1f85fd, type: 3}
   - {fileID: 7956166869753014071, guid: 852f7f60b9495a245aa74c9301bef689, type: 3}
   - {fileID: 7956166869753014071, guid: 2ee6db0b461c2c14dac3e0bfa0ad497d, type: 3}
+  - {fileID: 7956166869753014071, guid: 63e265c718cc1a9499daa019a1bd61bf, type: 3}
   m_itemRootTransform: {fileID: 5892308375914919116}
 --- !u!1 &1776551020981058608
 GameObject:

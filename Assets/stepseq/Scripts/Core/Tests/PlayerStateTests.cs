@@ -1,12 +1,12 @@
 using NUnit.Framework;
 using stepseq;
 
-public class EntityStateTests
+public class PlayerStateTests
 {
     [Test]
     public void Health00()
     {
-        using var player0 = new EntityState();
+        using var player0 = new PlayerState();
         
         // 体力を初期化
         player0.AddStack(StackType.AddHealth, 100f);
@@ -22,7 +22,7 @@ public class EntityStateTests
     [Test]
     public void MaxHealth00()
     {
-        using var player0 = new EntityState();
+        using var player0 = new PlayerState();
         
         // 体力を初期化
         player0.AddStack(StackType.AddHealth, 100f);
@@ -44,7 +44,7 @@ public class EntityStateTests
     [Test]
     public void Shield00()
     {
-        using var player0 = new EntityState();
+        using var player0 = new PlayerState();
         
         // 体力を初期化
         player0.AddStack(StackType.AddHealth, 100f);

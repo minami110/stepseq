@@ -25,6 +25,7 @@ namespace stepseq
         private string m_hintText = string.Empty;
         
         private Material _material = null!;
+        private bool _onClickReserved;
         
         private void Awake()
         {
@@ -49,6 +50,7 @@ namespace stepseq
         
         private void OnTriggerExit(Collider other)
         {
+            _onClickReserved = false;
             SetButtonColor(Color.gray);
             if (m_hintText.Length > 0)
             {
@@ -60,10 +62,18 @@ namespace stepseq
         {
             if (isPressed)
             {
+                _onClickReserved = true;
                 SetButtonColor(new Color(1f, 0.82f, 0.15f));
             }
-            
-            m_onClick.Invoke();
+            else
+            {
+                if (_onClickReserved)
+                {
+                    SetButtonColor(new Color(0.48f, 0.39f, 0.09f));
+                    m_onClick.Invoke();
+                    _onClickReserved = false;
+                }
+            }
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

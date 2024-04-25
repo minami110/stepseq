@@ -34,8 +34,8 @@ namespace stepseq
         
         internal bool AssignToSlot(SampleSlot slot)
         {
-            // ToDo: 所持金のチェック (現在は未実装)
-            // ToDo: 所持金の現象 (現在は未実装)
+            // ToDo: 購入可能かどうか所持金のチェック
+            // ToDo: 所持金の減少
             return slot.AssignSample(this);
         }
         
@@ -66,6 +66,6 @@ namespace stepseq
         
         protected abstract CategoryType[] GetCategories();
         
-        public abstract void Execute(EntityState from, EntityState to);
+        public abstract void Execute(PlayerState from, PlayerState to);
     }
 }
