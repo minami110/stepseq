@@ -13,7 +13,7 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return "相手のシールド値だけ体力を回復\nCategory: None";
+            return "相手のシールド値だけ体力を回復";
         }
         
         protected override CategoryType[] GetCategories()

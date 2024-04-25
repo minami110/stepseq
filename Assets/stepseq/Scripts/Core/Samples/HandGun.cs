@@ -25,7 +25,7 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return $"10 ダメージを与える. 残り: {_count} 発\nCategory: Fly, Fire";
+            return $"弾を1消費して 10 ダメージを与える, 弾はバトルのたびに補充される.\n残り: {_count} 発";
         }
         
         protected override CategoryType[] GetCategories()

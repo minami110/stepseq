@@ -157,7 +157,16 @@ namespace stepseq
                 }
                 
                 result = true;
-                transform.position = slot.transform.position;
+                
+                // ショップに消されるので, ショップから抜けておく
+                var trs = transform;
+                trs.SetParent(slot.transform);
+                
+                // もうショップにないので, Price を消しておく
+                m_priceText.text = string.Empty;
+                
+                // Slot の位置に移動しておく
+                trs.position = slot.transform.position;
                 break;
             }
             

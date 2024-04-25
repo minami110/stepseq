@@ -14,7 +14,7 @@ namespace stepseq
         
         protected override string GetHintText()
         {
-            return "10 シールドを得る\nCategory: Fly";
+            return "10 シールドを得る";
         }
         
         protected override CategoryType[] GetCategories()
