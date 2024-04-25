@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Edanoue.Rx;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace stepseq
         [Range(1f, 300f)]
         private float m_beatPerMinute = 15f;
         
-        private float                    _currentTime = _STOP_TIME;
+        private float                    _currentTime;
         private CancellationTokenSource? _isPlayingCts;
         
         private void OnDestroy()
@@ -33,6 +34,13 @@ namespace stepseq
             _isPlayingCts = null;
         }
         
+        private void Awake()
+        {
+            _currentTime = _STOP_TIME;
+            EventManager.QuantizeTime.Value = -1;
+            EventManager.LoopCount.Value = -1;
+        }
+        
         public void Play()
         {
             if (_isPlayingCts is not null)
@@ -44,7 +52,7 @@ namespace stepseq
             _currentTime = 0f;
             EventManager.OnBattleStart.OnNext(Unit.Default);
             EventManager.LoopCount.Value = 0;
-            EventManager.QuantizedTime.Value = 0;
+            EventManager.QuantizeTime.Value = 0;
             EventManager.OnPostUpdateQuantizeTime.OnNext(Unit.Default);
             
             _ = PlayLoopAsync(_isPlayingCts.Token);
@@ -64,7 +72,7 @@ namespace stepseq
             _currentTime = _STOP_TIME;
             EventManager.OnBattleEnd.OnNext(Unit.Default);
             EventManager.LoopCount.Value = -1;
-            EventManager.QuantizedTime.Value = -1;
+            EventManager.QuantizeTime.Value = -1;
         }
         
         private async Awaitable PlayLoopAsync(CancellationToken token)
@@ -77,13 +85,13 @@ namespace stepseq
                 if (_currentTime >= _END_TIME)
                 {
                     _currentTime = _START_TIME;
-                    EventManager.QuantizedTime.Value = 0;
+                    EventManager.QuantizeTime.Value = 0;
                     EventManager.OnPostUpdateQuantizeTime.OnNext(Unit.Default);
                     EventManager.LoopCount.Value++;
                 }
                 else
                 {
-                    EventManager.QuantizedTime.Value = (int)(_currentTime / _END_TIME * _TRACK_COUNT);
+                    EventManager.QuantizeTime.Value = (int)(_currentTime / _END_TIME * _TRACK_COUNT);
                 }
             }
         }

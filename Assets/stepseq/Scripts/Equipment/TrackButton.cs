@@ -58,7 +58,7 @@ namespace stepseq
         {
             _id = id;
             _track = track;
-            EventManager.QuantizedTime
+            EventManager.QuantizeTime
                 .Subscribe(this, (i, state) => { state.OnChangedActiveTrack(i); })
                 .RegisterTo(destroyCancellationToken);
         }
