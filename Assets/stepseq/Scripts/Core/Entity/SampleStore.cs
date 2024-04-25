@@ -5,10 +5,16 @@ using System.Collections.Generic;
 
 namespace stepseq
 {
-    public sealed class SampleStore: IDisposable
+    public sealed class SampleStore : IDisposable
     {
-        private readonly HashSet<SampleBase> _samples = new(8);
         private readonly Dictionary<CategoryType, int> _categoryDict = new();
+        private readonly HashSet<SampleBase>           _samples      = new(8);
+        
+        public void Dispose()
+        {
+            _samples.Clear();
+            _categoryDict.Clear();
+        }
         
         public bool Add(SampleBase sample)
         {
@@ -34,7 +40,7 @@ namespace stepseq
         
         public void Solve()
         {
-            foreach(var (category, count) in _categoryDict)
+            foreach (var (category, count) in _categoryDict)
             {
                 // ここでカテゴリーの処理を行う
                 switch (category)
@@ -57,6 +63,7 @@ namespace stepseq
                                 // Fire が 1 以上あれば 攻撃力を 10% 上昇させる
                                 break;
                         }
+                        
                         break;
                     }
                     case CategoryType.Fly:
@@ -69,6 +76,7 @@ namespace stepseq
                                 // Fly が 1 以上あれば 10% の確率で相手の直接攻撃を避ける, HP を 50 上昇
                                 break;
                         }
+                        
                         break;
                     case CategoryType.Nature:
                         switch (count)
@@ -80,6 +88,7 @@ namespace stepseq
                                 // Nature が 1 以上あれば 回復量を 20% 上昇させる
                                 break;
                         }
+                        
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -100,12 +109,6 @@ namespace stepseq
                     }
                 }
             }
-        }
-        
-        public void Dispose()
-        {
-            _samples.Clear();
-            _categoryDict.Clear();
         }
     }
 }

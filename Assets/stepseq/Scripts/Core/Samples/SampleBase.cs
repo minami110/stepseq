@@ -1,7 +1,5 @@
 using System;
-using System.Buffers;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace stepseq
 {
@@ -30,6 +28,10 @@ namespace stepseq
             get => GetCategories();
         }
         
+        public virtual void Dispose()
+        {
+        }
+        
         internal bool AssignToSlot(SampleSlot slot)
         {
             // ToDo: 所持金のチェック (現在は未実装)
@@ -54,9 +56,5 @@ namespace stepseq
         protected abstract CategoryType[] GetCategories();
         
         public abstract void Execute(EntityState from, EntityState to);
-        
-        public virtual void Dispose()
-        {
-        }
     }
 }

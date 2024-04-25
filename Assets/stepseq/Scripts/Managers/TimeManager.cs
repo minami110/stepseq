@@ -1,5 +1,4 @@
-using System;
-using System.Runtime.CompilerServices;
+using System.Threading;
 using Edanoue.Rx;
 using UnityEngine;
 
@@ -10,105 +9,83 @@ namespace stepseq
     [DisallowMultipleComponent]
     public class TimeManager : MonoBehaviour
     {
-        private const  float        _STOP_TIME   = -0.01f;
-        private const  float        _START_TIME  = 0f;
-        private const  float        _END_TIME    = 1f;
-        private const  int          _TRACK_COUNT = 8;
-        private static TimeManager? _instance;
+        private const float _STOP_TIME   = -0.01f;
+        private const float _START_TIME  = 0f;
+        private const float _END_TIME    = 1f;
+        private const int   _TRACK_COUNT = 8;
         
         [SerializeField]
-        [Range(1f, 1200f)]
-        private float m_beatPerMinute = 30f;
+        [Range(1f, 300f)]
+        private float m_beatPerMinute = 15f;
         
-        private readonly ReactiveProperty<int> _activeTrack = new(-1);
-        
-        private readonly ReactiveProperty<float> _currentTime = new(0f);
-        private readonly Subject<Unit>           _onPlay      = new();
-        
-        private bool _isPlaying;
-        
-        public static ReadOnlyReactiveProperty<int> ActiveTrack => GetInstance()._activeTrack;
-        public static Observable<Unit> OnPlay => GetInstance()._onPlay;
-        
-        private void Awake()
-        {
-            if (_instance != null)
-            {
-                throw new InvalidOperationException("PlayerState is a singleton and should only be initialized once.");
-            }
-            
-            _instance = this;
-            
-            _currentTime.Value = _STOP_TIME;
-            _currentTime.RegisterTo(destroyCancellationToken);
-            _activeTrack.RegisterTo(destroyCancellationToken);
-            _onPlay.RegisterTo(destroyCancellationToken);
-        }
-        
-        private void Update()
-        {
-            if (_isPlaying)
-            {
-                _currentTime.Value += Time.deltaTime / (60f / m_beatPerMinute);
-                if (_currentTime.Value >= _END_TIME)
-                {
-                    _currentTime.Value = _START_TIME;
-                    _activeTrack.Value = 0;
-                }
-                else
-                {
-                    _activeTrack.Value = (int)(_currentTime.Value / _END_TIME * _TRACK_COUNT);
-                }
-                
-                // Player それぞれの Stack を解決する
-                // ToDo: シードを適切に与える
-                var player0 = PlayerMockManager.GetPlayerMock(0);
-                var player1 = PlayerMockManager.GetPlayerMock(1);
-                player0.State.SolveHealth(0);
-                player1.State.SolveHealth(0);
-            }
-            else
-            {
-                _currentTime.Value = _STOP_TIME;
-                _activeTrack.Value = -1;
-            }
-        }
+        private float                    _currentTime = _STOP_TIME;
+        private CancellationTokenSource? _isPlayingCts;
         
         private void OnDestroy()
         {
-            _instance = null;
+            if (_isPlayingCts is null)
+            {
+                return;
+            }
+            
+            _isPlayingCts.Cancel();
+            _isPlayingCts.Dispose();
+            _isPlayingCts = null;
         }
         
         public void Play()
         {
-            _isPlaying = true;
+            if (_isPlayingCts is not null)
+            {
+                return;
+            }
             
-            // Player の初期化
-            var player0 = PlayerMockManager.GetPlayerMock(0);
-            player0.State.Clear(100f);
+            _isPlayingCts = new CancellationTokenSource();
+            _currentTime = 0f;
+            EventManager.OnBattleStart.OnNext(Unit.Default);
+            EventManager.LoopCount.Value = 0;
+            EventManager.QuantizedTime.Value = 0;
+            EventManager.OnPostUpdateQuantizeTime.OnNext(Unit.Default);
             
-            // Player の初期化
-            var player1 = PlayerMockManager.GetPlayerMock(1);
-            player1.State.Clear(100f);
-            
-            // イベントの通知
-            _onPlay.OnNext(Unit.Default);
+            _ = PlayLoopAsync(_isPlayingCts.Token);
         }
         
         public void Stop()
         {
-            _isPlaying = false;
-        }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static TimeManager GetInstance()
-        {
-            if (_instance != null)
+            if (_isPlayingCts is null)
             {
-                return _instance;
+                return;
             }
             
-            throw new InvalidOperationException("PlayerState is not initialized.");
+            _isPlayingCts.Cancel();
+            _isPlayingCts.Dispose();
+            _isPlayingCts = null;
+            
+            _currentTime = _STOP_TIME;
+            EventManager.OnBattleEnd.OnNext(Unit.Default);
+            EventManager.LoopCount.Value = -1;
+            EventManager.QuantizedTime.Value = -1;
+        }
+        
+        private async Awaitable PlayLoopAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await Awaitable.NextFrameAsync(token);
+                
+                _currentTime += Time.deltaTime / (60f / m_beatPerMinute);
+                if (_currentTime >= _END_TIME)
+                {
+                    _currentTime = _START_TIME;
+                    EventManager.QuantizedTime.Value = 0;
+                    EventManager.OnPostUpdateQuantizeTime.OnNext(Unit.Default);
+                    EventManager.LoopCount.Value++;
+                }
+                else
+                {
+                    EventManager.QuantizedTime.Value = (int)(_currentTime / _END_TIME * _TRACK_COUNT);
+                }
+            }
         }
     }
 }

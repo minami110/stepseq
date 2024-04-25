@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.CompilerServices;
 using Edanoue.Rx;
 using UnityEngine;
@@ -8,6 +7,9 @@ namespace stepseq
     [DisallowMultipleComponent]
     public sealed class PlayerMock : MonoBehaviour
     {
+        // バトル開始時のデフォルト体力
+        private const float _DEFAULT_HEALTH = 100f;
+        
         [SerializeField]
         private EntityStateVis m_entityStateVis = null!;
         
@@ -36,6 +38,26 @@ namespace stepseq
             _material = new MaterialWrapper(m_shader);
             _material.RegisterTo(destroyCancellationToken);
             m_renderer.sharedMaterial = _material;
+            
+            // EventManager のイベントを購読する
+            EventManager.OnBattleStart
+                .Subscribe(this, (_, state) =>
+                {
+                    // バトル開始時の初期化処理
+                    state.State.Clear();
+                    state.State.AddStack(StackType.AddHealth, _DEFAULT_HEALTH);
+                    state.State.AddStack(StackType.AddMaxHealth, _DEFAULT_HEALTH);
+                    state.State.Solve(0);
+                })
+                .RegisterTo(destroyCancellationToken);
+            
+            EventManager.OnPostUpdateQuantizeTime
+                .Subscribe(this, (_, state) =>
+                {
+                    // バトル中の処理
+                    state.State.Solve(0);
+                })
+                .RegisterTo(destroyCancellationToken);
         }
         
         // Update is called once per frame

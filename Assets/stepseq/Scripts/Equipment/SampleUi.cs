@@ -47,6 +47,7 @@ namespace stepseq
             {
                 throw new InvalidOperationException($"Type not found: {m_sampleTypeName}");
             }
+            
             _sampleBase = (SampleBase)Activator.CreateInstance(type);
             _sampleBase.RegisterTo(destroyCancellationToken);
             

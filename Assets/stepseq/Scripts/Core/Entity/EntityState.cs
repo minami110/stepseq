@@ -10,18 +10,16 @@ namespace stepseq
     /// </summary>
     public sealed class EntityState : IEntity, IDisposable
     {
-        // DeBuff stack
-        private readonly ReactiveProperty<float> _healthDamageRp = new();
+        private readonly ReactiveProperty<float> _healthRp    = new();
+        private readonly ReactiveProperty<float> _maxHealthRp = new();
+        private readonly ReactiveProperty<float> _shieldRp    = new();
         
-        private readonly ReactiveProperty<float> _healthRp       = new();
-        private readonly ReactiveProperty<float> _maxHealthRp    = new();
-        private readonly ReactiveProperty<float> _lifeSteal      = new();
-        private readonly ReactiveProperty<float> _luckRp         = new();
-        private readonly ReactiveProperty<float> _poisonRp       = new();
-        private readonly ReactiveProperty<float> _shieldDamageRp = new();
-        
-        // Buff stack
-        private readonly ReactiveProperty<float> _shieldRp = new();
+        private float _addHealthStack;
+        private float _addMaxHealthStack;
+        private float _addShieldStack;
+        private float _subHealthStack;
+        private float _subMaxHealthStack;
+        private float _subShieldStack;
         
         public ReadOnlyReactiveProperty<float> Health
         {
@@ -41,96 +39,46 @@ namespace stepseq
             get => _shieldRp;
         }
         
-        public ReadOnlyReactiveProperty<float> Luck
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _luckRp;
-        }
-        
-        public ReadOnlyReactiveProperty<float> LifeSteal
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _lifeSteal;
-        }
-        
-        public ReadOnlyReactiveProperty<float> Poison
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _poisonRp;
-        }
         
         public void Dispose()
         {
-            // Base
             _healthRp.Dispose();
             _maxHealthRp.Dispose();
-            // Buff
             _shieldRp.Dispose();
-            _luckRp.Dispose();
-            _lifeSteal.Dispose();
-            // DeBuff
-            _healthDamageRp.Dispose();
-            _shieldDamageRp.Dispose();
-            _poisonRp.Dispose();
         }
         
         public void AddStack(StackType type, float amount)
         {
             switch (type)
             {
-                // Buff
-                case StackType.Health:
+                case StackType.AddHealth:
                 {
-                    var newHealth = _healthRp.Value + amount;
-                    _healthRp.Value = Math.Clamp(newHealth, 0, _maxHealthRp.Value);
+                    _addHealthStack += amount;
                     break;
                 }
-                case StackType.MaxHealth:
+                case StackType.AddMaxHealth:
                 {
-                    var newMaxHealth = _maxHealthRp.Value + amount;
-                    _maxHealthRp.Value = Math.Max(0, newMaxHealth);
+                    _addMaxHealthStack += amount;
                     break;
                 }
-                case StackType.Shield:
+                case StackType.AddShield:
                 {
-                    var newShield = _shieldRp.Value + amount;
-                    newShield = Math.Max(0, newShield);
-                    _shieldRp.Value = newShield;
+                    _addShieldStack += amount;
                     break;
                 }
-                case StackType.Luck:
+                case StackType.SubHealth:
                 {
-                    var newLuck = _luckRp.Value + amount;
-                    newLuck = Math.Max(0, newLuck);
-                    _luckRp.Value = newLuck;
+                    _subHealthStack += amount;
                     break;
                 }
-                case StackType.LifeSteal:
+                case StackType.SubMaxHealth:
                 {
-                    var newLifeSteal = _lifeSteal.Value + amount;
-                    newLifeSteal = Math.Max(0, newLifeSteal);
-                    _lifeSteal.Value = newLifeSteal;
+                    _subMaxHealthStack += amount;
                     break;
                 }
-                // DeBuff
-                case StackType.HealthDamage:
+                case StackType.SubShield:
                 {
-                    var newHealthDamage = _healthDamageRp.Value + amount;
-                    newHealthDamage = Math.Max(0, newHealthDamage);
-                    _healthDamageRp.Value = newHealthDamage;
-                    break;
-                }
-                case StackType.ShieldDamage:
-                {
-                    var newShieldDamage = Math.Max(0, _shieldDamageRp.Value + amount);
-                    _shieldDamageRp.Value = newShieldDamage;
-                    break;
-                }
-                case StackType.Poison:
-                {
-                    var newPoison = _poisonRp.Value + amount;
-                    newPoison = Math.Max(0, newPoison);
-                    _poisonRp.Value = newPoison;
+                    _subShieldStack += amount;
                     break;
                 }
                 default:
@@ -138,49 +86,67 @@ namespace stepseq
             }
         }
         
-        public void SolveHealth(int seed)
+        public void Solve(int seed)
         {
-            // Solve shield damage
-            var newShield = _shieldRp.Value - _shieldDamageRp.Value;
-            _shieldDamageRp.Value = 0;
-            _shieldRp.Value = Math.Max(0, newShield);
+            // 現在の値をキャッシュしておく
+            var virtualMaxHealth = _maxHealthRp.Value;
+            var virtualHealth = _healthRp.Value;
+            var virtualShield = _shieldRp.Value;
+            var virtualDamage = 0f;
             
-            // Solve health damage
-            var healthDamage = _healthDamageRp.Value;
-            _healthDamageRp.Value = 0;
+            // Solve Shield stack
+            virtualShield += _addShieldStack;
+            virtualShield -= _subShieldStack;
+            _addShieldStack = 0;
+            _subShieldStack = 0;
+            virtualShield = Math.Max(virtualShield, 0);
             
-            // Solve poison
-            healthDamage += _poisonRp.Value;
+            // Solve MaxHealth stack
+            virtualMaxHealth += _addMaxHealthStack;
+            virtualMaxHealth -= _subMaxHealthStack;
+            _addMaxHealthStack = 0;
+            _subMaxHealthStack = 0;
+            virtualMaxHealth = Math.Max(virtualMaxHealth, 0);
             
-            // Solve shield and health
-            var currentShield = _shieldRp.Value;
+            // Solve AddHealth stack
+            virtualHealth += _addHealthStack;
+            _addHealthStack = 0;
+            virtualHealth = Math.Min(virtualHealth, virtualMaxHealth);
+            
+            // Solve SubHealth stack
+            virtualDamage += _subHealthStack;
+            _subHealthStack = 0;
+            
             // シールドがダメージより多いのならばシールドだけ削る
-            if (currentShield >= healthDamage)
+            if (virtualShield >= virtualDamage)
             {
-                _shieldRp.Value = currentShield - healthDamage;
+                virtualShield -= virtualDamage;
             }
             // シールドが耐えきれないならば, シールドを削って体力にダメージを与える
             else
             {
-                _shieldRp.Value = 0;
-                healthDamage -= currentShield;
-                _healthRp.Value -= healthDamage;
+                virtualDamage -= virtualShield;
+                virtualShield = 0f;
+                virtualHealth -= virtualDamage;
             }
+            
+            // Update Rp
+            _healthRp.Value = virtualHealth;
+            _maxHealthRp.Value = virtualMaxHealth;
+            _shieldRp.Value = virtualShield;
         }
         
-        public void Clear(float health)
+        public void Clear()
         {
-            // Base
-            _healthRp.Value = health;
-            _maxHealthRp.Value = health;
-            // Buff
+            _healthRp.Value = 0f;
+            _maxHealthRp.Value = 0f;
             _shieldRp.Value = 0;
-            _luckRp.Value = 0;
-            _lifeSteal.Value = 0;
-            // DeBuff
-            _healthDamageRp.Value = 0;
-            _shieldDamageRp.Value = 0;
-            _poisonRp.Value = 0;
+            _addHealthStack = 0;
+            _addMaxHealthStack = 0;
+            _addShieldStack = 0;
+            _subHealthStack = 0;
+            _subMaxHealthStack = 0;
+            _subShieldStack = 0;
         }
     }
 }

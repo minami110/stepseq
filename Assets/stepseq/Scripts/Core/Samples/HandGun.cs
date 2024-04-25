@@ -8,13 +8,13 @@ namespace stepseq
     public sealed class HandGun : SampleBase
     {
         private const           int            _MAX_COUNT  = 8;
-        private                 int            _count      = _MAX_COUNT;
         private static readonly CategoryType[] _categories = { CategoryType.Fire, CategoryType.Fly };
         private readonly        IDisposable    _eventManagerSubscription;
+        private                 int            _count = _MAX_COUNT;
         
         public HandGun()
         {
-            _eventManagerSubscription = TimeManager.OnPlay
+            _eventManagerSubscription = EventManager.OnBattleEnd
                 .Subscribe(this, (_, state) => { _count = _MAX_COUNT; });
         }
         
@@ -42,7 +42,7 @@ namespace stepseq
             
             _count--;
             // 相手にダメージ 10 を与える
-            EffectManager.AddEffect<TakeHealthDamage>(to, 10f);
+            EffectManager.AddEffect<SubHealth>(to, 10f);
         }
         
         public override void Dispose()

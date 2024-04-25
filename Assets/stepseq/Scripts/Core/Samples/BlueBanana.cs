@@ -31,7 +31,7 @@ namespace stepseq
             }
             
             // 相手のシールド値だけ体力を回復する
-            EffectManager.AddEffect<TakeHealth>(from, value);
+            EffectManager.AddEffect<AddHealth>(from, value);
         }
     }
 }
